@@ -16,12 +16,19 @@ target("LittleNetwork")
     add_files("src/LittleNetwork/**.cpp")
 
 
-target("Tests")
+target("Server")
     set_kind("binary")
     
     add_deps("LittleNetwork")
     
-    add_files("src/Tests/**.cpp")
+    add_files("src/Server/**.cpp")
+    
+target("Client")
+    set_kind("binary")
+    
+    add_deps("LittleNetwork")
+    
+    add_files("src/Client/**.cpp")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
