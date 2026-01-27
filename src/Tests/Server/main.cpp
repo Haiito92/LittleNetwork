@@ -5,6 +5,7 @@
 #include <LittleNetwork/WSAContext.hpp>
 #include <LittleNetwork/ServerTCPSocket.hpp>
 #include <LittleNetwork/ClientTCPSocket.hpp>
+#include <vector>
 
 int main(int argc, char** argv) {
 
@@ -21,29 +22,70 @@ int main(int argc, char** argv) {
         sockServer.Bind(bindAddr);
         sockServer.Listen();
 
-        sockaddr_in clientAddr;
-        Ln::ClientTCPSocket sockClient = sockServer.Accept(clientAddr);
+        std::vector<Ln::ClientTCPSocket> clientSockets;
 
-        char buffer[1024];
-        int byteRead = sockClient.Receive(buffer);
-        
-        fmt::print("Received {} bytes from client: ({})\n",byteRead, std::string_view(buffer, byteRead));
-    
-        std::string body = "<html><body><center><h1>Hello World!</h1></center></body></html>";
-        std::string response = "HTTP/1.1 200 OK\r\n";
-        response += "Content-Length: " + std::to_string(body.size()) + "\r\n";
-        response += "Content-Type: text/html\r\n";
-        response += "Connection: Closed\r\n";
-        response += "\r\n";
-        response += body;
-        
-        sockClient.Send(response);
-
-        
-        byteRead = sockClient.Receive(buffer);
-        if (byteRead == 0)
+        while (true)
         {
-            fmt::print("Client Disconnected gracefully!\n");
+            std::vector<WSAPOLLFD> descriptors;
+            {
+                WSAPOLLFD descriptor;
+                descriptor.fd = sockServer.GetHandle();
+                descriptor.events = POLLIN;
+                descriptor.revents = 0;
+                descriptors.push_back(descriptor);
+            }
+
+            for (const Ln::ClientTCPSocket& socket : clientSockets)
+            {
+                WSAPOLLFD descriptor;
+                descriptor.fd = socket.GetHandle();
+                descriptor.events = POLLIN;
+                descriptor.revents = 0;
+
+                descriptors.push_back(descriptor);
+            }
+
+            // Ask why timeout == -1
+            int activeSocketCount = WSAPoll(descriptors.data(), descriptors.size(), -1);
+
+            if (activeSocketCount == 0)
+            {
+                throw std::runtime_error(fmt::format("Error when polling: {}\n", WSAGetLastError()));
+            }
+
+            for (WSAPOLLFD& descriptor : descriptors)
+            {
+                if (descriptor.revents == 0)
+                    continue;
+
+                if (descriptor.fd == sockServer.GetHandle())
+                {
+                    sockaddr_in clientAddr;
+                    clientSockets.emplace_back(sockServer.Accept(clientAddr));
+                }
+                else
+                {
+                    char buffer[1024];
+                    int byteRead = recv(descriptor.fd, buffer, sizeof(buffer), 0);
+                    if (byteRead == 0 || byteRead == SOCKET_ERROR)
+                    {
+                        if (byteRead == SOCKET_ERROR)
+                            fmt::print("Failed to read from client ({})\n", WSAGetLastError());
+					
+                        fmt::print("Client disconnected\n");
+
+                        auto it = std::find_if(clientSockets.begin(), clientSockets.end(), [&](const Ln::ClientTCPSocket& socket)
+                        {
+                            return socket.GetHandle() == descriptor.fd;
+                        });
+                        
+                        clientSockets.erase(it);
+                        continue;
+                    }
+
+                    fmt::print("Received {} from client: {}\n", byteRead, std::string_view(buffer, byteRead));
+                }
+            }
         }
     }
     catch (std::exception& e)

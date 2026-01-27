@@ -19,9 +19,29 @@ namespace Ln
         m_sock = sock;
     }
 
+    TCPSocket::TCPSocket(TCPSocket&& other) noexcept:
+    m_sock(other.m_sock)
+    {
+        other.m_sock = INVALID_SOCKET;
+    }
+
     TCPSocket::~TCPSocket()
     {
-        closesocket(m_sock);
+        if (m_sock != INVALID_SOCKET)
+        {
+            closesocket(m_sock);
+        }
+    }
+
+    TCPSocket& TCPSocket::operator=(TCPSocket&& other) noexcept
+    {
+        if (this != &other)
+        {
+            m_sock = other.m_sock;
+            other.m_sock = INVALID_SOCKET;
+        }
+
+        return *this;
     }
 
     void TCPSocket::Bind(const sockaddr_in& bindAddr)

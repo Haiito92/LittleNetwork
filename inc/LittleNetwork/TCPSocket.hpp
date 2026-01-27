@@ -11,11 +11,11 @@ namespace Ln
         TCPSocket();
         TCPSocket(uint64_t sock);
         TCPSocket(const TCPSocket& other) = delete;
-        TCPSocket(TCPSocket&& other) noexcept = default;
+        TCPSocket(TCPSocket&& other) noexcept;
         ~TCPSocket();
 
         TCPSocket& operator=(const TCPSocket& other) = delete;
-        TCPSocket& operator=(TCPSocket&& other) noexcept = default;
+        TCPSocket& operator=(TCPSocket&& other) noexcept;
 
         void Bind(const sockaddr_in& bindAddr);
         
