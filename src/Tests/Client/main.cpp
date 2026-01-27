@@ -22,6 +22,12 @@ int main(int argc, char** argv) {
         
         std::string response = "Hello world!";
         clientSocket.Send(response);
+
+        char buffer[1024];
+        int byteRead = clientSocket.Receive(buffer);
+        
+        fmt::print("Received {} bytes from client: ({})\n",byteRead, std::string_view(buffer, byteRead));
+    
     }
     catch (std::exception& e)
     {

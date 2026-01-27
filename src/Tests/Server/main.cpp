@@ -38,6 +38,13 @@ int main(int argc, char** argv) {
         response += body;
         
         sockClient.Send(response);
+
+        
+        byteRead = sockClient.Receive(buffer);
+        if (byteRead == 0)
+        {
+            fmt::print("Client Disconnected gracefully!\n");
+        }
     }
     catch (std::exception& e)
     {
