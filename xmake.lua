@@ -1,15 +1,17 @@
 add_rules("mode.debug", "mode.release")
-add_requires("ws2_32", "fmt")
+add_requires("fmt")
 add_includedirs("inc")
 
 set_languages("c++20")
 set_encodings("utf-8")
 
 target("LittleNetwork")
-    set_kind("shared")
+    set_kind("static")
+    set_group("LittleNetwork")
     
     add_defines("LN_COMPILE")
-    add_packages("ws2_32", "fmt", {public = true})
+    add_packages("fmt", {public = true})
+    add_syslinks("ws2_32", {public = true})
     
     add_headerfiles("inc/(LittleNetwork/**.hpp)")
     add_headerfiles("inc/(LittleNetwork/**.inl)")
@@ -17,18 +19,20 @@ target("LittleNetwork")
 
 
 target("Server")
+    set_group("Tests")
     set_kind("binary")
     
     add_deps("LittleNetwork")
     
-    add_files("src/Server/**.cpp")
+    add_files("src/Tests/Server/**.cpp")
     
 target("Client")
+    set_group("Tests")
     set_kind("binary")
     
     add_deps("LittleNetwork")
     
-    add_files("src/Client/**.cpp")
+    add_files("src/Tests/Client/**.cpp")
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --

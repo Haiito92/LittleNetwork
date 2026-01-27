@@ -15,8 +15,11 @@ xmake version 3.0.4+HEAD.347e268f3
     <Filter Include="src">
       <UniqueIdentifier>{491FBF00-292E-479F-8C8F-7A2AC045023A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Server">
-      <UniqueIdentifier>{1963D879-1842-4CD6-B94E-A0348157E78F}</UniqueIdentifier>
+    <Filter Include="src\Tests">
+      <UniqueIdentifier>{C12A595C-C52F-48A6-BCF8-D459A76FB4DD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Tests\Server">
+      <UniqueIdentifier>{6DC2A66D-CBAE-4ED9-8E17-D9ADB55B6D3A}</UniqueIdentifier>
     </Filter>
 
   </ItemGroup>
@@ -43,8 +46,8 @@ xmake version 3.0.4+HEAD.347e268f3
   </ItemGroup>
   <ItemGroup>
 
-    <ClCompile Include="$(XmakeProjectDir)\src\Server\main.cpp">
-      <Filter>src\Server</Filter>
+    <ClCompile Include="$(XmakeProjectDir)\src\Tests\Server\main.cpp">
+      <Filter>src\Tests\Server</Filter>
     </ClCompile>
 
 
