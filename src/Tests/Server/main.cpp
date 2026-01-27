@@ -1,4 +1,5 @@
 #include <format>
+#include <thread>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <fmt/printf.h>
@@ -86,6 +87,8 @@ int main(int argc, char** argv) {
                     fmt::print("Received {} from client: {}\n", byteRead, std::string_view(buffer, byteRead));
                 }
             }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
     catch (std::exception& e)
