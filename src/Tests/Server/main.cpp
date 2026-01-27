@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
                         if (byteRead == SOCKET_ERROR)
                             fmt::print("Failed to read from client ({})\n", WSAGetLastError());
 					
-                        fmt::print("Client disconnected\n");
+                        //fmt::print("Client disconnected\n");
 
                         auto it = std::find_if(clientSockets.begin(), clientSockets.end(), [&](const Ln::ClientTCPSocket& socket)
                         {
@@ -84,7 +84,14 @@ int main(int argc, char** argv) {
                         continue;
                     }
 
-                    fmt::print("Received {} from client: {}\n", byteRead, std::string_view(buffer, byteRead));
+                    std::string clientMessage = fmt::format("{}: {}", descriptor.fd, std::string_view(buffer, byteRead));
+                    fmt::print("{}\n", clientMessage);
+                    
+                    for (const Ln::ClientTCPSocket& socket : clientSockets)
+                    {
+                        if (socket.GetHandle() == descriptor.fd) continue;
+                        socket.Send(clientMessage);
+                    }
                 }
             }
 
