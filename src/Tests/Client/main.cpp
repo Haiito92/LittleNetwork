@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
                         if (byteRead == SOCKET_ERROR)
                             fmt::print("Failed to read from server ({})\n", WSAGetLastError());
 					       
-                        break;
+                        continue;
                     }
             
                     fmt::print("{}", std::string_view(buffer, byteRead));
