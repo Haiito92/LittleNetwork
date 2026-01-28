@@ -12,6 +12,8 @@ VisualStudioVersion = 17.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{7E5E25AC-E040-4F81-B5D4-A33DB6DD82A4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Serialization", "Serialization\Serialization.vcxproj", "{3AA44BFC-449D-40C5-A474-A38707121878}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{00138615-91A1-450C-AD08-549EEA0BB155}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LittleNetwork", "LittleNetwork\LittleNetwork.vcxproj", "{83035BDD-E66D-4517-B715-13A708F4FE5E}"
@@ -37,12 +39,16 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{7E5E25AC-E040-4F81-B5D4-A33DB6DD82A4}.debug|x64.ActiveCfg = debug|x64
 		{7E5E25AC-E040-4F81-B5D4-A33DB6DD82A4}.debug|x64.Build.0 = debug|x64
+		{3AA44BFC-449D-40C5-A474-A38707121878}.debug|x64.ActiveCfg = debug|x64
+		{3AA44BFC-449D-40C5-A474-A38707121878}.debug|x64.Build.0 = debug|x64
 		{00138615-91A1-450C-AD08-549EEA0BB155}.debug|x64.ActiveCfg = debug|x64
 		{00138615-91A1-450C-AD08-549EEA0BB155}.debug|x64.Build.0 = debug|x64
 		{83035BDD-E66D-4517-B715-13A708F4FE5E}.debug|x64.ActiveCfg = debug|x64
 		{83035BDD-E66D-4517-B715-13A708F4FE5E}.debug|x64.Build.0 = debug|x64
 		{7E5E25AC-E040-4F81-B5D4-A33DB6DD82A4}.release|x64.ActiveCfg = release|x64
 		{7E5E25AC-E040-4F81-B5D4-A33DB6DD82A4}.release|x64.Build.0 = release|x64
+		{3AA44BFC-449D-40C5-A474-A38707121878}.release|x64.ActiveCfg = release|x64
+		{3AA44BFC-449D-40C5-A474-A38707121878}.release|x64.Build.0 = release|x64
 		{00138615-91A1-450C-AD08-549EEA0BB155}.release|x64.ActiveCfg = release|x64
 		{00138615-91A1-450C-AD08-549EEA0BB155}.release|x64.Build.0 = release|x64
 		{83035BDD-E66D-4517-B715-13A708F4FE5E}.release|x64.ActiveCfg = release|x64
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{00138615-91A1-450C-AD08-549EEA0BB155} = {A943D6DD-7CEC-4D76-BC34-5560CA130741}
 		{83035BDD-E66D-4517-B715-13A708F4FE5E} = {8447B955-41F2-420B-A3A3-4A1CC4225003}
+		{3AA44BFC-449D-40C5-A474-A38707121878} = {A943D6DD-7CEC-4D76-BC34-5560CA130741}
 		{7E5E25AC-E040-4F81-B5D4-A33DB6DD82A4} = {A943D6DD-7CEC-4D76-BC34-5560CA130741}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
