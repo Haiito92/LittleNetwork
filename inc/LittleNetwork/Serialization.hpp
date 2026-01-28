@@ -10,6 +10,7 @@ namespace Ln
 
     template <typename T> requires std::is_arithmetic_v<T>
     T DeserializeArithmetic(const std::vector<std::uint8_t>& bytes, size_t& offset);
+    
 }
 
 #include "Serialization.inl"
