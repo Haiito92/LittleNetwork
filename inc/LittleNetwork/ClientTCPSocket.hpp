@@ -18,9 +18,11 @@ namespace Ln
         ClientTCPSocket& operator=(const ClientTCPSocket& other) = delete;
         ClientTCPSocket& operator=(ClientTCPSocket&& other) noexcept = default;
 
-        void Connect(const sockaddr_in& serverAddr);
+        void Connect(const IPAddress& serverAddr);
 
         void Send(const std::string& message) const;
         int Receive(char* buffer) const;
+
+        static int Receive(uint64_t socket, char* buffer);
     };
 }

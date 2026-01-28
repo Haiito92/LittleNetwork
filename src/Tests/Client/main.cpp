@@ -6,8 +6,10 @@
 #include <fmt/printf.h>
 #include <LittleNetwork/WSAContext.hpp>
 #include <LittleNetwork/ClientTCPSocket.hpp>
+#include <LittleNetwork/IPAddress.hpp>
 #include <conio.h>
 #include <iostream>
+
 
 int main(int argc, char** argv) {
 
@@ -16,13 +18,13 @@ int main(int argc, char** argv) {
         Ln::WSAContext wsaContext;
 
         Ln::ClientTCPSocket clientSocket;
+
+        Ln::IPAddress serverAddr;
+        serverAddr.family = Ln::AddressFamily::Inet;
+        serverAddr.address = "127.0.0.1";
+        serverAddr.port = 10001;
         
-        sockaddr_in serverIp;
-        serverIp.sin_family = AF_INET;
-        inet_pton(AF_INET, "127.0.0.1", &serverIp.sin_addr);
-        serverIp.sin_port = htons(10001);
-        
-        clientSocket.Connect(serverIp);
+        clientSocket.Connect(serverAddr);
 
         std::string message;
         std::cout << "> ";
@@ -72,17 +74,14 @@ int main(int argc, char** argv) {
 
             // Gestion de la réception des info de la part du serveur
 
-            std::vector<WSAPOLLFD> descriptors;
-            {
-                WSAPOLLFD descriptor;
-                descriptor.fd = clientSocket.GetHandle();
-                descriptor.events = POLLIN;
-                descriptor.revents = 0;
-                descriptors.push_back(descriptor);
-            }
-            
+           
+            WSAPOLLFD descriptor;
+            descriptor.fd = clientSocket.GetHandle();
+            descriptor.events = POLLIN;
+            descriptor.revents = 0;
+
             // Ask why timeout == -1
-            int activeSocketCount = WSAPoll(descriptors.data(), descriptors.size(), 0);
+            int activeSocketCount = WSAPoll(&descriptor, 1, 0);
             
             if (activeSocketCount == SOCKET_ERROR)
             {
@@ -94,26 +93,23 @@ int main(int argc, char** argv) {
                 continue;
             }
             
-            for (WSAPOLLFD& descriptor : descriptors)
+            if (descriptor.revents == 0)
+                continue;
+        
+            if (descriptor.fd == clientSocket.GetHandle())
             {
-                if (descriptor.revents == 0)
-                    continue;
-            
-                if (descriptor.fd == clientSocket.GetHandle())
+                char buffer[1024];
+                int byteRead = Ln::ClientTCPSocket::Receive(descriptor.fd, buffer);
+                if (byteRead == 0 || byteRead == SOCKET_ERROR)
                 {
-                    char buffer[1024];
-                    int byteRead = recv(descriptor.fd, buffer, sizeof(buffer), 0);
-                    if (byteRead == 0 || byteRead == SOCKET_ERROR)
-                    {
-                        if (byteRead == SOCKET_ERROR)
-                            fmt::print("Failed to read from server ({})\n", WSAGetLastError());
-					       
-                        continue;
-                    }
-            
-                    fmt::print("{}", std::string_view(buffer, byteRead));
-                    std::cout << "\n> " << std::flush;
+                    if (byteRead == SOCKET_ERROR)
+                        fmt::print("Disconnect from server ({})\n", WSAGetLastError());
+					   
+                    continue;
                 }
+                
+                fmt::print("{}", std::string_view(buffer, byteRead));
+                std::cout << "\n> " << std::flush;
             }
         }
     }

@@ -19,6 +19,6 @@ namespace Ln
         ServerTCPSocket& operator=(ServerTCPSocket&& other) noexcept = default;
 
         void Listen(int backlog = 10);
-        ClientTCPSocket Accept(sockaddr_in& clientAddr);
+        ClientTCPSocket Accept();
     };
 }

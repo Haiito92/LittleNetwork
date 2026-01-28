@@ -21,8 +21,9 @@ namespace Ln
         }
     }
 
-    ClientTCPSocket ServerTCPSocket::Accept(sockaddr_in& clientAddr)
+    ClientTCPSocket ServerTCPSocket::Accept()
     {
+        sockaddr_in clientAddr;
         int clientAddrSize = sizeof(clientAddr);
         SOCKET client = accept(m_sock, reinterpret_cast<sockaddr*>(&clientAddr), &clientAddrSize);
         if (client == INVALID_SOCKET)

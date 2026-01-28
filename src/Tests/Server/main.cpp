@@ -6,7 +6,9 @@
 #include <LittleNetwork/WSAContext.hpp>
 #include <LittleNetwork/ServerTCPSocket.hpp>
 #include <LittleNetwork/ClientTCPSocket.hpp>
+#include <LittleNetwork/IPAddress.hpp>
 #include <vector>
+
 
 int main(int argc, char** argv) {
 
@@ -15,11 +17,12 @@ int main(int argc, char** argv) {
         Ln::WSAContext wsaContext;
 
         Ln::ServerTCPSocket sockServer;
-        sockaddr_in bindAddr;
-        inet_pton(AF_INET, "0.0.0.0", &bindAddr.sin_addr);
-        bindAddr.sin_port = htons(10001);
-        bindAddr.sin_family = AF_INET;
 
+        Ln::IPAddress bindAddr;
+        bindAddr.family = Ln::AddressFamily::Inet;
+        bindAddr.address = "0.0.0.0";
+        bindAddr.port = 10001;
+        
         sockServer.Bind(bindAddr);
         sockServer.Listen();
 
@@ -61,13 +64,12 @@ int main(int argc, char** argv) {
 
                 if (descriptor.fd == sockServer.GetHandle())
                 {
-                    sockaddr_in clientAddr;
-                    clientSockets.emplace_back(sockServer.Accept(clientAddr));
+                    clientSockets.emplace_back(sockServer.Accept());
                 }
                 else
                 {
                     char buffer[1024];
-                    int byteRead = recv(descriptor.fd, buffer, sizeof(buffer), 0);
+                    int byteRead = Ln::ClientTCPSocket::Receive(descriptor.fd, buffer);
                     if (byteRead == 0 || byteRead == SOCKET_ERROR)
                     {
                         if (byteRead == SOCKET_ERROR)

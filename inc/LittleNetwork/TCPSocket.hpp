@@ -5,6 +5,8 @@
 
 namespace Ln
 {
+    struct IPAddress;
+    
     class LN_API TCPSocket
     {
     public:
@@ -17,7 +19,7 @@ namespace Ln
         TCPSocket& operator=(const TCPSocket& other) = delete;
         TCPSocket& operator=(TCPSocket&& other) noexcept;
 
-        void Bind(const sockaddr_in& bindAddr);
+        void Bind(const IPAddress& bindAddr);
         
         uint64_t GetHandle() const;
         
