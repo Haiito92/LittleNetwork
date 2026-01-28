@@ -76,19 +76,37 @@ int main(int argc, char** argv) {
         // std::string deserializedString = Ln::DeserializeString(bytes, offset);
         // fmt::print("Deserialized String: {} \n", string);
 
-        std::map<std::uint8_t, std::uint8_t> values;
-        values[5] = 6;
-        values[42] = 57;
-        values[245] = 132;
-        Ln::SerializeArithmeticMap(bytes, values);
-        
-        std::map<std::uint8_t, std::uint8_t> deserializedValues = Ln::DeserializeArithmeticMap(bytes, offset);
-        for (const auto& deserializedPair : deserializedValues)
-        {
-            fmt::print("Deserialized key: {} \n", deserializedPair.first);
-            fmt::print("Deserialized value: {} \n", deserializedPair.second);
-        }
-        
+        // std::map<std::uint8_t, std::uint8_t> values;
+        // values[5] = 6;
+        // values[42] = 57;
+        // values[245] = 132;
+        // Ln::SerializeArithmeticMap(bytes, values);
+        //
+        // std::map<std::uint8_t, std::uint8_t> deserializedValues = Ln::DeserializeArithmeticMap(bytes, offset);
+        // for (const auto& deserializedPair : deserializedValues)
+        // {
+        //     fmt::print("Deserialized key: {} \n", deserializedPair.first);
+        //     fmt::print("Deserialized value: {} \n", deserializedPair.second);
+        // }
+
+
+        int a = 2;
+        int b = 8;
+
+        uint8_t byte = 0;
+        byte |= a;
+        byte |= (b<<4);
+
+        // 1000 0010
+        Ln::SerializeArithmetic(bytes, byte);
+
+        uint8_t deserializeByte = Ln::DeserializeArithmetic<uint8_t>(bytes, offset);
+
+        int dA = byte & 15;
+        byte >>= 4;
+        int dB = byte & 15;
+        fmt::print("Deserialized a: {} \n", dA);
+        fmt::print("Deserialized a: {} \n", dB);
     }
     catch (std::exception& e)
     {
