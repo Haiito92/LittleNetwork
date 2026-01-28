@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 #include <WinSock2.h>
 
 namespace Ln
