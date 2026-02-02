@@ -113,7 +113,7 @@ xmake version 3.0.4+HEAD.347e268f3
   </ItemGroup>
   <ItemGroup>
 
-    <ClCompile Include="$(XmakeProjectDir)\src\Tests\Client\main.cpp">
+    <ClCompile Include="$(XmakeProjectDir)\src\Tests\Client\clientTCP.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
 
