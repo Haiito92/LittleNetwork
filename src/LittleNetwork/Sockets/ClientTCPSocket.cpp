@@ -1,8 +1,8 @@
 #include <stdexcept>
-#include <LittleNetwork/ClientTCPSocket.hpp>
+#include <LittleNetwork/Sockets/ClientTCPSocket.hpp>
 #include <WinSock2.h>
 #include <fmt/printf.h>
-#include <LittleNetwork/IPAddress.hpp>
+#include <LittleNetwork/Sockets/IPAddress.hpp>
 
 namespace Ln
 {

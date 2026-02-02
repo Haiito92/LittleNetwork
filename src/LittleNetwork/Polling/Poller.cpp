@@ -1,6 +1,6 @@
 #include <stdexcept>
-#include <LittleNetwork/Poller.hpp>
-#include <LittleNetwork/Descriptor.hpp>
+#include <LittleNetwork/Polling/Poller.hpp>
+#include <LittleNetwork/Polling/Descriptor.hpp>
 #include <WinSock2.h>
 #include <fmt/format.h>
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <LittleNetwork/Export.hpp>
-#include <LittleNetwork/TCPSocket.hpp>
+#include <LittleNetwork/Sockets/TCPSocket.hpp>
 
 namespace Ln
 {

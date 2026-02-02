@@ -1,4 +1,4 @@
-#include <LittleNetwork/Serialization.hpp>
+#include <LittleNetwork/Serialization/Serialization.hpp>
 
 namespace Ln
 {
