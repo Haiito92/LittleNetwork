@@ -9,6 +9,10 @@
 #include <LittleNetwork/IPAddress.hpp>
 #include <conio.h>
 #include <iostream>
+#include <LittleNetwork/Descriptor.hpp>
+#include <LittleNetwork/Poller.hpp>
+
+#include "LittleNetwork/Serialization.hpp"
 
 
 int main(int argc, char** argv) {
@@ -17,109 +21,74 @@ int main(int argc, char** argv) {
     {
         Ln::WSAContext wsaContext;
 
-        Ln::ClientTCPSocket clientSocket;
+        Ln::ClientTCPSocket clientSock;
 
-        Ln::IPAddress serverAddr;
-        serverAddr.family = Ln::AddressFamily::Inet;
-        serverAddr.address = "127.0.0.1";
-        serverAddr.port = 10001;
+        Ln::IPAddress address;
+        address.family = Ln::AddressFamily::Inet;
+        address.address = "127.0.0.1";
+        address.port = 10001;
+
+        if (!clientSock.Connect(address))
+            return EXIT_FAILURE;
+
+        Ln::Poller clientPoller;
+
+        Ln::Descriptor clientDescriptor;
+        clientDescriptor.sock = clientSock.GetHandle();
+        clientPoller.AddDescriptor(clientDescriptor);
         
-        clientSocket.Connect(serverAddr);
-
-        std::string message;
-        std::cout << "> ";
         bool isRunning = true;
         while (isRunning)
         {
-            if (_kbhit()) //< Est-ce qu'une touche est enfoncée ?
+            if (_kbhit())
             {
-                char c = _getch(); //< On récupère la touche enfoncée (sans l'afficher)
-                if (c == '\b') //< gestion du retour arrière
+                char c = _getch(); 
+                if (c == '\b')
                 {
-                    if (!message.empty())
-                    {
-                        // Afficher un retour arrière déplace juste le curseur vers le caractère précédent
-                        // pour l'effacer nous pouvons mettre un espace et redéplacer le curseur à nouveau vers l'arrière
-                        std::cout << "\b \b";
-
-                        // On enlève le caractère de notre message en cours
-                        message.pop_back();
-                    }
+                    isRunning = false;
+                    continue;
                 }
-
                 else if (c == '\r')
                 {
-                    // \r correspond à l'appui sur la touche entrée, on envoie le message si celui-ci n'est pas vide
-                    if (message.empty())
+                    std::vector<std::uint8_t> bytes;
+
+                    fmt::print("\n## Test with strings ##\n\n");
+                    
+                    std::string message = "Jérémy je t'aime si tu vois ce message !";
+                    Ln::SerializeString(bytes, message);
+
+                    if (!clientSock.Send(bytes))
                     {
-                        isRunning = false;
-                        break; //< message vide, on casse la boucle
+                        fmt::print("Failed to send data to server.\n");
                     }
-
-                    // Gestion et/ou envoi du message au serveur
-                    clientSocket.Send(message);
-
-                    // On affiche un retour à la ligne et le marqueur de saisie
-                    std::cout << "\n> " << std::flush;
-
-                    // On vide le message pour revenir à la suite
-                    message.clear();
-                }
-                else
-                {
-                    std::cout << c; // on affiche le caractère
-                    message.push_back(c); // on rajoute tout autre caractère dans notre saisie
                 }
             }
 
-            // Gestion de la réception des info de la part du serveur
-
-           
-            WSAPOLLFD descriptor;
-            descriptor.fd = clientSocket.GetHandle();
-            descriptor.events = POLLIN;
-            descriptor.revents = 0;
-
-            // Ask why timeout == -1
-            int activeSocketCount = WSAPoll(&descriptor, 1, 0);
-            
-            if (activeSocketCount == SOCKET_ERROR)
-            {
-                throw std::runtime_error(fmt::format("Error when polling: {}\n", WSAGetLastError()));
-            }
-            
-            if (activeSocketCount == 0)
+            if (!clientPoller.Poll(0))
             {
                 continue;
             }
-            
+
+            const Ln::Descriptor& descriptor = clientPoller.GetDescriptorAtIndex(0);
+
             if (descriptor.revents == 0)
                 continue;
         
-            if (descriptor.fd == clientSocket.GetHandle())
+            if (descriptor.sock == clientSock.GetHandle())
             {
-                char buffer[1024];
-                int byteRead = Ln::ClientTCPSocket::Receive(descriptor.fd, buffer);
-                if (byteRead == 0 || byteRead == SOCKET_ERROR)
-                {
-                    if (byteRead == SOCKET_ERROR)
-                        fmt::print("Disconnect from server ({})\n", WSAGetLastError());
-					   
-                    continue;
-                }
-                
-                fmt::print("{}", std::string_view(buffer, byteRead));
-                std::cout << "\n> " << std::flush;
+                // we do nothing on receive in this test
             }
         }
+        
+        return EXIT_SUCCESS;
     }
     catch (std::exception& e)
     {
-        fmt::print("Catched standard exception: {}\n", e.what());
+        throw std::runtime_error(fmt::format("Exception occured: {}\n", e.what()));
     }
     catch (...)
     {
-        fmt::print("Catched unknown exception\n");
+         throw std::runtime_error(fmt::format("Unknown exception occured\n"));
     }
 
     return 0;

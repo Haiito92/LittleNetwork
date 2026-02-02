@@ -6,16 +6,20 @@
 
 namespace Ln
 {
-    TCPSocket::TCPSocket()
+    TCPSocket::TCPSocket():
+    m_sock()
     {
         m_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
         if (m_sock == INVALID_SOCKET)
         {
-            throw std::runtime_error(fmt::format("Failed to create socket ({})\n", WSAGetLastError()));
+            throw std::runtime_error(fmt::format("Failed to create TCP socket: {}\n", WSAGetLastError()));
         }
+
+        SetOption(TCPSocketOption::NoDelay, true);
     }
 
-    TCPSocket::TCPSocket(uint64_t sock)
+    TCPSocket::TCPSocket(std::uint64_t sock)
     {
         m_sock = sock;
     }
@@ -36,7 +40,7 @@ namespace Ln
 
     TCPSocket& TCPSocket::operator=(TCPSocket&& other) noexcept
     {
-        if (this != &other)
+        if (&other != this)
         {
             m_sock = other.m_sock;
             other.m_sock = INVALID_SOCKET;
@@ -45,34 +49,66 @@ namespace Ln
         return *this;
     }
 
-    void TCPSocket::Bind(const IPAddress& bindAddr)
+    bool TCPSocket::Bind(const IPAddress& bindAddress)
     {
-        sockaddr_in sockAddr;
+        sockaddr_in addr;
         
-        switch (bindAddr.family)
+        switch (bindAddress.family)
         {
             case AddressFamily::Inet:
-            {
-                sockAddr.sin_family = AF_INET;
-                inet_pton(AF_INET, bindAddr.address.c_str(), &sockAddr.sin_addr);
-                break;
-            }
+                {
+                    addr.sin_family = AF_INET;
+                    inet_pton(AF_INET, bindAddress.address.c_str(), &addr.sin_addr);
+                    break;
+                }
             case AddressFamily::Inet6:
-            {
-                throw std::runtime_error(fmt::format("Address family not supported\n"));
-            }
+                {
+                    fmt::print("Failed to bind: address family not supported.\n");
+                    return false;
+                }
         }
 
-        sockAddr.sin_port = htons(bindAddr.port);
-
-        if (bind(m_sock, reinterpret_cast<const sockaddr*>(&sockAddr), sizeof(sockAddr)) == SOCKET_ERROR)
+        addr.sin_port = htons(bindAddress.port);
+        
+        if (bind(m_sock, reinterpret_cast<const sockaddr*>(&addr), sizeof(addr)) == SOCKET_ERROR)
         {
-            throw std::runtime_error(fmt::format("Failed to bind socket ({})\n", WSAGetLastError()));
-        }  
+            fmt::print("WSA Error when binding TCP socket: {}\n", WSAGetLastError());
+            return false;
+        }
+
+        return true;
     }
-    
-    uint64_t TCPSocket::GetHandle() const
+
+    std::uint64_t TCPSocket::GetHandle()
     {
         return m_sock;
+    }
+
+    std::uint64_t TCPSocket::GetHandle() const
+    {
+        return m_sock;
+    }
+
+    bool TCPSocket::SetOption(const TCPSocketOption& option, bool isOn)
+    {
+        std::uint16_t wsaOption;
+        switch (option)
+        {
+            case TCPSocketOption::NoDelay: wsaOption = TCP_NODELAY; break;
+            default:
+                {
+                    fmt::print("Failed to set TCP socket option: Unknown TCP Socket option\n");
+                    return false;
+                }
+        }
+        
+        if (setsockopt(m_sock, IPPROTO_TCP, wsaOption, reinterpret_cast<const char*>(&isOn), sizeof(isOn)) == SOCKET_ERROR)
+        {
+            fmt::print("Failed to set TCP socket option ({})\n", WSAGetLastError());
+
+            return false;
+        }
+
+        return true;
     }
 }

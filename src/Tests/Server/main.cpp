@@ -8,6 +8,10 @@
 #include <LittleNetwork/ClientTCPSocket.hpp>
 #include <LittleNetwork/IPAddress.hpp>
 #include <vector>
+#include <LittleNetwork/Descriptor.hpp>
+#include <LittleNetwork/Poller.hpp>
+
+#include "LittleNetwork/Serialization.hpp"
 
 
 int main(int argc, char** argv) {
@@ -16,97 +20,108 @@ int main(int argc, char** argv) {
     {
         Ln::WSAContext wsaContext;
 
-        Ln::ServerTCPSocket sockServer;
+        Ln::ServerTCPSocket serverSock;
 
-        Ln::IPAddress bindAddr;
-        bindAddr.family = Ln::AddressFamily::Inet;
-        bindAddr.address = "0.0.0.0";
-        bindAddr.port = 10001;
-        
-        sockServer.Bind(bindAddr);
-        sockServer.Listen();
+        Ln::IPAddress address;
+        address.family = Ln::AddressFamily::Inet;
+        address.address = "0.0.0.0";
+        address.port = 10001;
+    
+        if (!serverSock.Bind(address))
+            return EXIT_FAILURE;
+        if (!serverSock.Listen())
+            return EXIT_FAILURE;
 
         std::vector<Ln::ClientTCPSocket> clientSockets;
 
+        Ln::Poller serverPoller;
+        
+        {
+            Ln::Descriptor serverDescriptor;
+            serverDescriptor.sock = serverSock.GetHandle();
+            serverPoller.AddDescriptor(serverDescriptor);
+        }
+        
         while (true)
         {
-            std::vector<WSAPOLLFD> descriptors;
+            if (!serverPoller.Poll(1))
             {
-                WSAPOLLFD descriptor;
-                descriptor.fd = sockServer.GetHandle();
-                descriptor.events = POLLIN;
-                descriptor.revents = 0;
-                descriptors.push_back(descriptor);
+                continue;
             }
 
-            for (const Ln::ClientTCPSocket& socket : clientSockets)
+            serverPoller.ForEachDescriptor([&](const Ln::Descriptor& descriptor)
             {
-                WSAPOLLFD descriptor;
-                descriptor.fd = socket.GetHandle();
-                descriptor.events = POLLIN;
-                descriptor.revents = 0;
+                 if (descriptor.revents == 0)
+                    return;
 
-                descriptors.push_back(descriptor);
-            }
-
-            // Ask why timeout == -1
-            int activeSocketCount = WSAPoll(descriptors.data(), descriptors.size(), -1);
-
-            if (activeSocketCount == 0)
-            {
-                throw std::runtime_error(fmt::format("Error when polling: {}\n", WSAGetLastError()));
-            }
-
-            for (WSAPOLLFD& descriptor : descriptors)
-            {
-                if (descriptor.revents == 0)
-                    continue;
-
-                if (descriptor.fd == sockServer.GetHandle())
+                if (descriptor.sock == serverSock.GetHandle())
                 {
-                    clientSockets.emplace_back(sockServer.Accept());
+                    Ln::ClientTCPSocket newClient = serverSock.Accept();
+                    if (newClient.GetHandle() == Ln::TCPSocket::InvalidSocket)
+                    {
+                        fmt::print("Failed to accept client\n");
+                        return;
+                    }
+
+                    Ln::Descriptor clientDescriptor;
+                    clientDescriptor.sock = newClient.GetHandle();
+                    serverPoller.AddDescriptor(clientDescriptor);
+                    
+                    clientSockets.push_back(std::move(newClient));
+                    
+                    fmt::print("Client accepted\n");
                 }
                 else
                 {
-                    char buffer[1024];
-                    int byteRead = Ln::ClientTCPSocket::Receive(descriptor.fd, buffer);
-                    if (byteRead == 0 || byteRead == SOCKET_ERROR)
+                    std::vector<uint8_t> bytes(1024); // << On créé un byte vector de taille 1024 (on va recevoir au maximum 1024 bytes)
+                    int bytesRead = 0; // << ce int sert à connaître le nombre de bytes réellement lu.
+                    
+                    if (!Ln::ClientTCPSocket::Receive(descriptor.sock, bytes, bytesRead))
                     {
-                        if (byteRead == SOCKET_ERROR)
-                            fmt::print("Failed to read from client ({})\n", WSAGetLastError());
-					
-                        //fmt::print("Client disconnected\n");
+                        fmt::print("Client received failed\n");
+                        return;
+                    }
+                    
+                    if (bytesRead == 0)
+                    {
+                        fmt::print("Client disconnected\n");
 
                         auto it = std::find_if(clientSockets.begin(), clientSockets.end(), [&](const Ln::ClientTCPSocket& socket)
                         {
-                            return socket.GetHandle() == descriptor.fd;
+                            return socket.GetHandle() == descriptor.sock;
                         });
+
+                        if (it != clientSockets.end())
+                        {
+                            serverPoller.RemoveDescriptor(it->GetHandle());
                         
-                        clientSockets.erase(it);
-                        continue;
+                            clientSockets.erase(it);
+                        }
+                        return;
                     }
 
-                    std::string clientMessage = fmt::format("{}: {}", descriptor.fd, std::string_view(buffer, byteRead));
-                    fmt::print("{}\n", clientMessage);
+                    size_t offset = 0;
+
+                    // TEST WITH STRINGS //
                     
-                    for (const Ln::ClientTCPSocket& socket : clientSockets)
-                    {
-                        if (socket.GetHandle() == descriptor.fd) continue;
-                        socket.Send(clientMessage);
-                    }
+                    fmt::print("\n## Test with strings ##\n\n");
+                    
+                    std::string message = Ln::DeserializeString(bytes, offset);
+                    
+                    fmt::print("Received string: {}\n", message);
                 }
-            }
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            });
         }
+        
+        return EXIT_SUCCESS;
     }
     catch (std::exception& e)
     {
-        fmt::print("Catched standard exception: {}\n", e.what());
+        throw std::runtime_error(fmt::format("Exception occured: {}\n", e.what()));
     }
     catch (...)
     {
-        fmt::print("Catched unknown exception\n");
+        throw std::runtime_error(fmt::format("Unknown exception occured\n"));
     }
 
     return 0;

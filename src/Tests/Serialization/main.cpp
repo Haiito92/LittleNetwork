@@ -89,24 +89,23 @@ int main(int argc, char** argv) {
         //     fmt::print("Deserialized value: {} \n", deserializedPair.second);
         // }
 
-
-        int a = 2;
-        int b = 8;
-
-        uint8_t byte = 0;
-        byte |= a;
-        byte |= (b<<4);
-
-        // 1000 0010
-        Ln::SerializeArithmetic(bytes, byte);
-
-        uint8_t deserializeByte = Ln::DeserializeArithmetic<uint8_t>(bytes, offset);
-
-        int dA = byte & 15;
-        byte >>= 4;
-        int dB = byte & 15;
-        fmt::print("Deserialized a: {} \n", dA);
-        fmt::print("Deserialized a: {} \n", dB);
+        // int a = 2;
+        // int b = 8;
+        //
+        // uint8_t byte = 0;
+        // byte |= a;
+        // byte |= (b<<4);
+        //
+        // // 1000 0010
+        // Ln::SerializeArithmetic(bytes, byte);
+        //
+        // uint8_t deserializeByte = Ln::DeserializeArithmetic<uint8_t>(bytes, offset);
+        //
+        // int dA = byte & 15;
+        // byte >>= 4;
+        // int dB = byte & 15;
+        // fmt::print("Deserialized a: {} \n", dA);
+        // fmt::print("Deserialized b: {} \n", dB);
     }
     catch (std::exception& e)
     {

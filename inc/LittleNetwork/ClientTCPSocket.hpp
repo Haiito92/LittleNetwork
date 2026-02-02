@@ -1,6 +1,5 @@
 #pragma once
-#include <string>
-#include <WS2tcpip.h>
+#include <vector>
 #include <LittleNetwork/Export.hpp>
 #include <LittleNetwork/TCPSocket.hpp>
 
@@ -10,19 +9,18 @@ namespace Ln
     {
     public:
         ClientTCPSocket();
-        ClientTCPSocket(uint64_t sock);
+        ClientTCPSocket(std::uint64_t sock);
         ClientTCPSocket(const ClientTCPSocket& other) = delete;
         ClientTCPSocket(ClientTCPSocket&& other) noexcept = default;
-        ~ClientTCPSocket();
-
+        ~ClientTCPSocket() = default;
+    
         ClientTCPSocket& operator=(const ClientTCPSocket& other) = delete;
         ClientTCPSocket& operator=(ClientTCPSocket&& other) noexcept = default;
 
-        void Connect(const IPAddress& serverAddr);
+        bool Connect(const IPAddress& serverAddress);
 
-        void Send(const std::string& message) const;
-        int Receive(char* buffer) const;
-
-        static int Receive(uint64_t socket, char* buffer);
+        bool Send(const std::vector<uint8_t>& bytes) const;
+        bool Receive(std::vector<uint8_t>& bytes, int& bytesRead) const;
+        static bool Receive(std::uint64_t sock, std::vector<uint8_t>& bytes, int& bytesRead);
     };
 }

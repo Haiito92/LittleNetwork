@@ -4,7 +4,7 @@
 
 namespace Ln
 {
-    enum class AddressFamily
+    enum class AddressFamily : std::uint8_t
     {
         Inet,
         Inet6
@@ -15,6 +15,6 @@ namespace Ln
     public:
         AddressFamily family = AddressFamily::Inet;
         std::string address = "127.0.0.1";
-        uint16_t port = 10001;
+        std::uint16_t port = 10001;
     };
 }

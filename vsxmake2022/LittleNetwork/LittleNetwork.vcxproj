@@ -109,8 +109,10 @@ xmake version 3.0.4+HEAD.347e268f3
   <Import Project="$(XmakeProgramDir)\scripts\vsxmake\vsproj\Xmake.props" />
   <ItemGroup>
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\ClientTCPSocket.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Descriptor.hpp" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Export.hpp" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\IPAddress.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Poller.hpp" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Serialization.hpp" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Serialization.inl" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\ServerTCPSocket.hpp" />
@@ -122,6 +124,9 @@ xmake version 3.0.4+HEAD.347e268f3
   <ItemGroup>
 
     <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\ClientTCPSocket.cpp">
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Poller.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Serialization.cpp">

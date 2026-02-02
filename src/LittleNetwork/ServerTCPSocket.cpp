@@ -6,30 +6,38 @@
 
 namespace Ln
 {
-    ServerTCPSocket::ServerTCPSocket(): TCPSocket()
+    ServerTCPSocket::ServerTCPSocket():TCPSocket()
     {
-        
     }
 
-    ServerTCPSocket::~ServerTCPSocket() = default;
+    ServerTCPSocket::ServerTCPSocket(std::uint64_t sock):TCPSocket(sock)
+    {
+    
+    }
 
-    void ServerTCPSocket::Listen(int backlog)
+    bool ServerTCPSocket::Listen(int backlog)
     {
         if (listen(m_sock, backlog) == SOCKET_ERROR)
         {
-            throw std::runtime_error(fmt::format("Failed to put socket into listen mode ({})\n", WSAGetLastError()));
+            fmt::print("WSA Error when Server TCP socket tried to listen: {}\n", WSAGetLastError());
+            return false;
         }
+    
+        return true;
     }
 
     ClientTCPSocket ServerTCPSocket::Accept()
     {
         sockaddr_in clientAddr;
         int clientAddrSize = sizeof(clientAddr);
-        SOCKET client = accept(m_sock, reinterpret_cast<sockaddr*>(&clientAddr), &clientAddrSize);
-        if (client == INVALID_SOCKET)
+        SOCKET clientSock = accept(m_sock, (sockaddr*)&clientAddr, &clientAddrSize);
+        if (clientSock == INVALID_SOCKET)
         {
-            throw std::runtime_error(fmt::format("Failed to accept new client ({})\n", WSAGetLastError()));
+            fmt::print("WSA Error when Server TCP socket tried to accept client: {}\n", WSAGetLastError());
         }
-        return ClientTCPSocket(client);
+
+        ClientTCPSocket newClient(clientSock);
+        newClient.SetOption(TCPSocketOption::NoDelay, true);
+        return newClient;
     }
 }

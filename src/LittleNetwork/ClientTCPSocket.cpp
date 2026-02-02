@@ -7,64 +7,86 @@
 namespace Ln
 {
     
-    ClientTCPSocket::ClientTCPSocket(): TCPSocket()
+    ClientTCPSocket::ClientTCPSocket():TCPSocket()
+    {
+    }
+
+    ClientTCPSocket::ClientTCPSocket(std::uint64_t sock):TCPSocket(sock)
     {
         
     }
 
-    ClientTCPSocket::ClientTCPSocket(uint64_t sock): TCPSocket(sock)
+    bool ClientTCPSocket::Connect(const IPAddress& serverAddress)
     {
-    }
-
-    ClientTCPSocket::~ClientTCPSocket() = default;
-
-    void ClientTCPSocket::Connect(const IPAddress& serverAddr)
-    {
-        sockaddr_in sockAddr;
+        sockaddr_in addr;
         
-        switch (serverAddr.family)
+        switch (serverAddress.family)
         {
-            case AddressFamily::Inet:
+        case AddressFamily::Inet:
             {
-                sockAddr.sin_family = AF_INET;
-                inet_pton(AF_INET, serverAddr.address.c_str(), &sockAddr.sin_addr);
+                addr.sin_family = AF_INET;
+                inet_pton(AF_INET, serverAddress.address.c_str(), &addr.sin_addr);
                 break;
             }
-            case AddressFamily::Inet6:
+        case AddressFamily::Inet6:
             {
-                throw std::runtime_error(fmt::format("Address family not supported\n"));
+                fmt::print("Failed to bind: address family not supported.\n");
+                return false;
             }
         }
 
-        sockAddr.sin_port = htons(serverAddr.port);
-
-        if (connect(m_sock, reinterpret_cast<const sockaddr*>(&sockAddr), sizeof(sockAddr)) == SOCKET_ERROR)
+        addr.sin_port = htons(serverAddress.port);
+        
+        if (connect(m_sock, (const sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
         {
-            throw std::runtime_error(fmt::format("Failed to connect to server ({})\n", WSAGetLastError()));
-        }
-    }
-
-    void ClientTCPSocket::Send(const std::string& message) const
-    {
-        if (send(m_sock, message.data(), message.size(), 0) == SOCKET_ERROR)
-        {
-            throw std::runtime_error(fmt::format("Failed to send answer to client ({})\n", WSAGetLastError()));
-        }
-    }
-
-    int ClientTCPSocket::Receive(char* buffer) const
-    {
-        return Receive(m_sock, buffer);
-    }
-
-    int ClientTCPSocket::Receive(uint64_t socket, char* buffer)
-    {
-        int byteRead = recv(socket, buffer, sizeof(buffer), 0);
-        if (byteRead == SOCKET_ERROR)
-        {
-            throw std::runtime_error(fmt::format("Failed to read from client ({})\n", WSAGetLastError()));
+            fmt::print("WSA Error when Client TCP socket tried to connect: {}\n", WSAGetLastError());
+            return false;
         }
 
-        return byteRead;
+        return true;
+    }
+
+    bool ClientTCPSocket::Send(const std::vector<uint8_t>& bytes) const
+    {
+        if (send(m_sock, reinterpret_cast<const char*>(&bytes[0]), bytes.size(), 0) == SOCKET_ERROR)
+        {
+            fmt::print("WSA Error when Client TCP socket tried to send data: {}\n", WSAGetLastError());
+            return false;
+        }
+
+        return true;
+    }
+
+    bool ClientTCPSocket::Receive(std::vector<uint8_t>& bytes, int& bytesRead) const
+    {
+        return Receive(m_sock, bytes, bytesRead);
+    }
+
+    bool ClientTCPSocket::Receive(std::uint64_t sock, std::vector<uint8_t>& bytes, int& bytesRead)
+    {
+        if (bytes.size() == 0)
+        {
+            fmt::print("Failed to Receive data: bytes size == 0\n");
+            return false;
+        }
+        
+        bytesRead = recv(sock, reinterpret_cast<char*>(&bytes[0]), bytes.size(), 0);
+
+        if (bytesRead == SOCKET_ERROR)
+        {
+            int error = WSAGetLastError();
+            
+            if (error == WSAECONNRESET)
+            {
+                bytesRead = 0;
+            }
+            else
+            {
+                fmt::print("WSA Error when Client TCP socket tried to receive data: {}\n", error);
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
