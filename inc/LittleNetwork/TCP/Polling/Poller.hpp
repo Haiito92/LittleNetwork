@@ -3,7 +3,7 @@
 #include <functional>
 #include <LittleNetwork/Export.hpp>
 
-namespace Ln
+namespace LN
 {
     struct Descriptor;
 

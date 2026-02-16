@@ -2,7 +2,7 @@
 #include <string>
 #include <LittleNetwork/Export.hpp>
 
-namespace Ln
+namespace LN
 {
     enum class AddressFamily : std::uint8_t
     {

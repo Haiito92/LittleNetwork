@@ -17,12 +17,12 @@ int main(int argc, char** argv) {
 
     try
     {
-        Ln::WSAContext wsaContext;
+        LN::WSAContext wsaContext;
 
-        Ln::ServerTCPSocket serverSock;
+        LN::ServerTCPSocket serverSock;
 
-        Ln::IPAddress address;
-        address.family = Ln::AddressFamily::Inet;
+        LN::IPAddress address;
+        address.family = LN::AddressFamily::Inet;
         address.address = "0.0.0.0";
         address.port = 10001;
     
@@ -31,12 +31,12 @@ int main(int argc, char** argv) {
         if (!serverSock.Listen())
             return EXIT_FAILURE;
 
-        std::vector<Ln::ClientTCPSocket> clientSockets;
+        std::vector<LN::ClientTCPSocket> clientSockets;
 
-        Ln::Poller serverPoller;
+        LN::Poller serverPoller;
         
         {
-            Ln::Descriptor serverDescriptor;
+            LN::Descriptor serverDescriptor;
             serverDescriptor.sock = serverSock.GetHandle();
             serverPoller.AddDescriptor(serverDescriptor);
         }
@@ -48,21 +48,21 @@ int main(int argc, char** argv) {
                 continue;
             }
 
-            serverPoller.ForEachDescriptor([&](const Ln::Descriptor& descriptor)
+            serverPoller.ForEachDescriptor([&](const LN::Descriptor& descriptor)
             {
                  if (descriptor.revents == 0)
                     return;
 
                 if (descriptor.sock == serverSock.GetHandle())
                 {
-                    Ln::ClientTCPSocket newClient = serverSock.Accept();
-                    if (newClient.GetHandle() == Ln::TCPSocket::InvalidSocket)
+                    LN::ClientTCPSocket newClient = serverSock.Accept();
+                    if (newClient.GetHandle() == LN::TCPSocket::InvalidSocket)
                     {
                         fmt::print("Failed to accept client\n");
                         return;
                     }
 
-                    Ln::Descriptor clientDescriptor;
+                    LN::Descriptor clientDescriptor;
                     clientDescriptor.sock = newClient.GetHandle();
                     serverPoller.AddDescriptor(clientDescriptor);
                     
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
                     std::vector<uint8_t> bytes(1024); // << On créé un byte vector de taille 1024 (on va recevoir au maximum 1024 bytes)
                     int bytesRead = 0; // << ce int sert à connaître le nombre de bytes réellement lu.
                     
-                    if (!Ln::ClientTCPSocket::Receive(descriptor.sock, bytes, bytesRead))
+                    if (!LN::ClientTCPSocket::Receive(descriptor.sock, bytes, bytesRead))
                     {
                         fmt::print("Client received failed\n");
                         return;
@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
                     {
                         fmt::print("Client disconnected\n");
 
-                        auto it = std::find_if(clientSockets.begin(), clientSockets.end(), [&](const Ln::ClientTCPSocket& socket)
+                        auto it = std::find_if(clientSockets.begin(), clientSockets.end(), [&](const LN::ClientTCPSocket& socket)
                         {
                             return socket.GetHandle() == descriptor.sock;
                         });
@@ -105,7 +105,7 @@ int main(int argc, char** argv) {
                     
                     fmt::print("\n## Test with strings ##\n\n");
                     
-                    std::string message = Ln::DeserializeString(bytes, offset);
+                    std::string message = LN::DeserializeString(bytes, offset);
                     
                     fmt::print("Received string: {}\n", message);
                 }

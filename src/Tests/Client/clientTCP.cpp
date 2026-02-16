@@ -18,21 +18,21 @@ int main(int argc, char** argv) {
 
     try
     {
-        Ln::WSAContext wsaContext;
+        LN::WSAContext wsaContext;
 
-        Ln::ClientTCPSocket clientSock;
+        LN::ClientTCPSocket clientSock;
 
-        Ln::IPAddress address;
-        address.family = Ln::AddressFamily::Inet;
+        LN::IPAddress address;
+        address.family = LN::AddressFamily::Inet;
         address.address = "127.0.0.1";
         address.port = 10001;
 
         if (!clientSock.Connect(address))
             return EXIT_FAILURE;
 
-        Ln::Poller clientPoller;
+        LN::Poller clientPoller;
 
-        Ln::Descriptor clientDescriptor;
+        LN::Descriptor clientDescriptor;
         clientDescriptor.sock = clientSock.GetHandle();
         clientPoller.AddDescriptor(clientDescriptor);
         
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
                     fmt::print("\n## Test with strings ##\n\n");
                     
                     std::string message = "Jérémy je t'aime si tu vois ce message !";
-                    Ln::SerializeString(bytes, message);
+                    LN::SerializeString(bytes, message);
 
                     if (!clientSock.Send(bytes))
                     {
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
                 continue;
             }
 
-            const Ln::Descriptor& descriptor = clientPoller.GetDescriptorAtIndex(0);
+            const LN::Descriptor& descriptor = clientPoller.GetDescriptorAtIndex(0);
 
             if (descriptor.revents == 0)
                 continue;

@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
                     std::vector<std::uint8_t> bytes;
 
                     float myFloat = 32.32f;
-                    Ln::SerializeArithmetic(bytes, myFloat);
+                    LN::SerializeArithmetic(bytes, myFloat);
 
                     // if (!clientSock.Send(bytes))
                     // {

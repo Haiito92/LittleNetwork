@@ -4,7 +4,7 @@
 #include <fmt/printf.h>
 #include <LittleNetwork/TCP/Sockets/ClientTCPSocket.hpp>
 
-namespace Ln
+namespace LN
 {
     ServerTCPSocket::ServerTCPSocket():TCPSocket()
     {

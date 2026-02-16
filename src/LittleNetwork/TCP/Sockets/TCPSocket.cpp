@@ -4,7 +4,7 @@
 #include <fmt/printf.h>
 #include <LittleNetwork/TCP/Sockets/IPAddress.hpp>
 
-namespace Ln
+namespace LN
 {
     TCPSocket::TCPSocket():
     m_sock()

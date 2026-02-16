@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <LittleNetwork/Export.hpp>
 
-namespace Ln
+namespace LN
 {
     enum class LN_API PollEvents : std::uint16_t
     {

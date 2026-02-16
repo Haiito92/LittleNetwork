@@ -1,6 +1,6 @@
 #include <LittleNetwork/Serialization/Serialization.hpp>
 
-namespace Ln
+namespace LN
 {
     void SerializeString(std::vector<std::uint8_t>& bytes, const std::string& string)
     {

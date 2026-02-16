@@ -18,6 +18,9 @@ xmake version 3.0.4+HEAD.347e268f3
     <Filter Include="inc\LittleNetwork">
       <UniqueIdentifier>{19E69697-EF0E-45ED-92B8-9A9465F9152C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc\LittleNetwork\ENet">
+      <UniqueIdentifier>{6659E302-47F2-434C-8096-CB8CF388D101}</UniqueIdentifier>
+    </Filter>
     <Filter Include="inc\LittleNetwork\Serialization">
       <UniqueIdentifier>{5F527259-9AFA-4911-8098-F6C1513A7EE3}</UniqueIdentifier>
     </Filter>
@@ -35,6 +38,9 @@ xmake version 3.0.4+HEAD.347e268f3
     </Filter>
     <Filter Include="src\LittleNetwork">
       <UniqueIdentifier>{BAADE6C0-8EA1-4F42-B4F3-8731BECD3855}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\LittleNetwork\ENet">
+      <UniqueIdentifier>{297C5FCC-78B3-4AB7-BD10-31A35C5D67E0}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\LittleNetwork\Serialization">
       <UniqueIdentifier>{6381D7B9-64B7-450B-8A2E-554D414DB840}</UniqueIdentifier>
@@ -68,6 +74,9 @@ xmake version 3.0.4+HEAD.347e268f3
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\ENet\ENetContext.hpp">
+      <Filter>inc\LittleNetwork\ENet</Filter>
+    </ClInclude>
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Export.hpp">
       <Filter>inc\LittleNetwork</Filter>
     </ClInclude>
@@ -103,6 +112,9 @@ xmake version 3.0.4+HEAD.347e268f3
   </ItemGroup>
   <ItemGroup>
 
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\ENet\ENetContext.cpp">
+      <Filter>src\LittleNetwork\ENet</Filter>
+    </ClCompile>
     <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Serialization\Serialization.cpp">
       <Filter>src\LittleNetwork\Serialization</Filter>
     </ClCompile>

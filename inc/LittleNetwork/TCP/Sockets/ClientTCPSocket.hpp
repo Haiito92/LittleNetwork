@@ -3,7 +3,7 @@
 #include <LittleNetwork/Export.hpp>
 #include <LittleNetwork/TCP/Sockets/TCPSocket.hpp>
 
-namespace Ln
+namespace LN
 {
     class LN_API ClientTCPSocket : public TCPSocket
     {

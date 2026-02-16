@@ -1,7 +1,7 @@
 #pragma once
 #include <LittleNetwork/Export.hpp>
 
-namespace Ln
+namespace LN
 {
     class LN_API WSAContext
     {

@@ -2,7 +2,7 @@
 #include <LittleNetwork/TCP/WSAContext.hpp>
 #include <WinSock2.h>
 
-namespace Ln
+namespace LN
 {
     WSAContext::WSAContext()
     {

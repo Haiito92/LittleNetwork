@@ -3,7 +3,7 @@
 #include <WS2tcpip.h>
 #include <LittleNetwork/Export.hpp>
 
-namespace Ln
+namespace LN
 {
     struct IPAddress;
     enum class TCPSocketOption: std::uint8_t;

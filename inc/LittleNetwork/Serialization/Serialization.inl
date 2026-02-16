@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <WinSock2.h>
 
-namespace Ln
+namespace LN
 {
     template <typename T> requires std::is_arithmetic_v<T>
     void SerializeArithmetic(std::vector<std::uint8_t>& bytes, T value)

@@ -5,7 +5,7 @@
 #include <string>
 #include <LittleNetwork/Export.hpp>
 
-namespace Ln
+namespace LN
 {
     template <typename T> requires std::is_arithmetic_v<T>
     void SerializeArithmetic(std::vector<std::uint8_t>& bytes, T value);
