@@ -6,11 +6,11 @@
 #include <fmt/printf.h>
 #include <conio.h>
 #include <iostream>
-#include <LittleNetwork/WSAContext.hpp>
-#include <LittleNetwork/Sockets/ClientTCPSocket.hpp>
-#include <LittleNetwork/Sockets/IPAddress.hpp>
-#include <LittleNetwork/Polling/Descriptor.hpp>
-#include <LittleNetwork/Polling/Poller.hpp>
+#include <LittleNetwork/TCP/WSAContext.hpp>
+#include <LittleNetwork/TCP/Sockets/ClientTCPSocket.hpp>
+#include <LittleNetwork/TCP/Sockets/IPAddress.hpp>
+#include <LittleNetwork/TCP/Polling/Descriptor.hpp>
+#include <LittleNetwork/TCP/Polling/Poller.hpp>
 #include <LittleNetwork/Serialization/Serialization.hpp>
 
 
