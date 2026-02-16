@@ -1,23 +1,20 @@
 #include <chrono>
 #include <format>
 #include <thread>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
 #include <fmt/printf.h>
 #include <conio.h>
 #include <iostream>
-#include <LittleNetwork/WSAContext.hpp>
-#include <LittleNetwork/Sockets/ClientTCPSocket.hpp>
-#include <LittleNetwork/Sockets/IPAddress.hpp>
-#include <LittleNetwork/Polling/Descriptor.hpp>
-#include <LittleNetwork/Polling/Poller.hpp>
 #include <LittleNetwork/Serialization/Serialization.hpp>
+#include <LittleNetwork/ENet/ENetContext.hpp>
 
 
 int main(int argc, char** argv) {
 
     try
     {
+        LN::ENetContext enetContext;
+
+        
         bool isRunning = true;
         while (isRunning)
         {

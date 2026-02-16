@@ -5,11 +5,18 @@ add_includedirs("inc")
 set_languages("c++20")
 set_encodings("utf-8")
 
+local static = true
+
+
 ---------------  LittleNetwork Targets --------------- 
 
 target("LittleNetwork")
     set_kind("static")
     set_group("LittleNetwork")
+    
+    if static then
+        add_defines("LN_STATIC")
+    end
     
     add_defines("LN_COMPILE")
     add_packages("fmt", "enet6", {public = true})
@@ -25,6 +32,10 @@ target("ServerTCP")
     set_group("Tests")
     set_kind("binary")
     
+    if static then
+        add_defines("LN_STATIC")
+    end
+
     add_deps("LittleNetwork")
     
     add_files("src/Tests/Server/serverTCP.cpp")
@@ -32,6 +43,10 @@ target("ServerTCP")
 target("ServerENet")
     set_group("Tests")
     set_kind("binary")
+    
+    if static then
+        add_defines("LN_STATIC")
+    end
     
     add_deps("LittleNetwork")
     
@@ -41,6 +56,10 @@ target("ClientTCP")
     set_group("Tests")
     set_kind("binary")
     
+    if static then
+        add_defines("LN_STATIC")
+    end
+    
     add_deps("LittleNetwork")
     
     add_files("src/Tests/Client/clientTCP.cpp")
@@ -48,6 +67,10 @@ target("ClientTCP")
 target("ClientENet")
     set_group("Tests")
     set_kind("binary")
+    
+    if static then
+        add_defines("LN_STATIC")
+    end
     
     add_deps("LittleNetwork")
     
@@ -60,6 +83,10 @@ target("Serialization")
     set_kind("binary")
     
     add_deps("LittleNetwork")
+    
+    if static then
+        add_defines("LN_STATIC")
+    end
     
     add_files("src/Tests/Serialization/**.cpp")
 
