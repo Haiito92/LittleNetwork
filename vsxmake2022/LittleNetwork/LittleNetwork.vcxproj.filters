@@ -18,14 +18,17 @@ xmake version 3.0.4+HEAD.347e268f3
     <Filter Include="inc\LittleNetwork">
       <UniqueIdentifier>{19E69697-EF0E-45ED-92B8-9A9465F9152C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="inc\LittleNetwork\Polling">
-      <UniqueIdentifier>{73790C86-8923-4BB2-A5B1-AD4941860FF7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="inc\LittleNetwork\Serialization">
       <UniqueIdentifier>{5F527259-9AFA-4911-8098-F6C1513A7EE3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="inc\LittleNetwork\Sockets">
-      <UniqueIdentifier>{C8053DD3-C192-478C-858A-D2BC3CA28775}</UniqueIdentifier>
+    <Filter Include="inc\LittleNetwork\TCP">
+      <UniqueIdentifier>{268D1126-3DD6-41BE-9F3E-20AB342725EB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\LittleNetwork\TCP\Polling">
+      <UniqueIdentifier>{F1E42109-DC90-4CF0-89F4-FF96D7D5C5B3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\LittleNetwork\TCP\Sockets">
+      <UniqueIdentifier>{203FC000-0572-41A3-BFF2-543C49DF9C71}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{491FBF00-292E-479F-8C8F-7A2AC045023A}</UniqueIdentifier>
@@ -33,14 +36,17 @@ xmake version 3.0.4+HEAD.347e268f3
     <Filter Include="src\LittleNetwork">
       <UniqueIdentifier>{BAADE6C0-8EA1-4F42-B4F3-8731BECD3855}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\LittleNetwork\Polling">
-      <UniqueIdentifier>{17AAB0ED-2BDF-4EAD-9734-F3D172119E34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\LittleNetwork\Serialization">
       <UniqueIdentifier>{6381D7B9-64B7-450B-8A2E-554D414DB840}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\LittleNetwork\Sockets">
-      <UniqueIdentifier>{3BB0082E-9C5A-478E-9EE7-3FF7178A0417}</UniqueIdentifier>
+    <Filter Include="src\LittleNetwork\TCP">
+      <UniqueIdentifier>{E512869C-C61E-449E-978B-B7C91EC2A003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\LittleNetwork\TCP\Polling">
+      <UniqueIdentifier>{E27EBAB8-EACA-4A76-92A9-36CA6606EBBA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\LittleNetwork\TCP\Sockets">
+      <UniqueIdentifier>{66BF8B7C-DD09-4130-A5C4-E58D792B318B}</UniqueIdentifier>
     </Filter>
 
   </ItemGroup>
@@ -65,55 +71,55 @@ xmake version 3.0.4+HEAD.347e268f3
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Export.hpp">
       <Filter>inc\LittleNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Polling\Descriptor.hpp">
-      <Filter>inc\LittleNetwork\Polling</Filter>
-    </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Polling\Poller.hpp">
-      <Filter>inc\LittleNetwork\Polling</Filter>
-    </ClInclude>
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Serialization\Serialization.hpp">
       <Filter>inc\LittleNetwork\Serialization</Filter>
     </ClInclude>
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Serialization\Serialization.inl">
       <Filter>inc\LittleNetwork\Serialization</Filter>
     </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\ClientTCPSocket.hpp">
-      <Filter>inc\LittleNetwork\Sockets</Filter>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Polling\Descriptor.hpp">
+      <Filter>inc\LittleNetwork\TCP\Polling</Filter>
     </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\IPAddress.hpp">
-      <Filter>inc\LittleNetwork\Sockets</Filter>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Polling\Poller.hpp">
+      <Filter>inc\LittleNetwork\TCP\Polling</Filter>
     </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\ServerTCPSocket.hpp">
-      <Filter>inc\LittleNetwork\Sockets</Filter>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\ClientTCPSocket.hpp">
+      <Filter>inc\LittleNetwork\TCP\Sockets</Filter>
     </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\TCPSocket.hpp">
-      <Filter>inc\LittleNetwork\Sockets</Filter>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\IPAddress.hpp">
+      <Filter>inc\LittleNetwork\TCP\Sockets</Filter>
     </ClInclude>
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\WSAContext.hpp">
-      <Filter>inc\LittleNetwork</Filter>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\ServerTCPSocket.hpp">
+      <Filter>inc\LittleNetwork\TCP\Sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\TCPSocket.hpp">
+      <Filter>inc\LittleNetwork\TCP\Sockets</Filter>
+    </ClInclude>
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\WSAContext.hpp">
+      <Filter>inc\LittleNetwork\TCP</Filter>
     </ClInclude>
 
 
   </ItemGroup>
   <ItemGroup>
 
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Polling\Poller.cpp">
-      <Filter>src\LittleNetwork\Polling</Filter>
-    </ClCompile>
     <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Serialization\Serialization.cpp">
       <Filter>src\LittleNetwork\Serialization</Filter>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Sockets\ClientTCPSocket.cpp">
-      <Filter>src\LittleNetwork\Sockets</Filter>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Polling\Poller.cpp">
+      <Filter>src\LittleNetwork\TCP\Polling</Filter>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Sockets\ServerTCPSocket.cpp">
-      <Filter>src\LittleNetwork\Sockets</Filter>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Sockets\ClientTCPSocket.cpp">
+      <Filter>src\LittleNetwork\TCP\Sockets</Filter>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Sockets\TCPSocket.cpp">
-      <Filter>src\LittleNetwork\Sockets</Filter>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Sockets\ServerTCPSocket.cpp">
+      <Filter>src\LittleNetwork\TCP\Sockets</Filter>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\WSAContext.cpp">
-      <Filter>src\LittleNetwork</Filter>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Sockets\TCPSocket.cpp">
+      <Filter>src\LittleNetwork\TCP\Sockets</Filter>
+    </ClCompile>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\WSAContext.cpp">
+      <Filter>src\LittleNetwork\TCP</Filter>
     </ClCompile>
 
 

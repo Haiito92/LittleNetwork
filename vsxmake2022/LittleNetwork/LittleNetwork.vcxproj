@@ -109,36 +109,36 @@ xmake version 3.0.4+HEAD.347e268f3
   <Import Project="$(XmakeProgramDir)\scripts\vsxmake\vsproj\Xmake.props" />
   <ItemGroup>
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Export.hpp" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Polling\Descriptor.hpp" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Polling\Poller.hpp" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Serialization\Serialization.hpp" />
     <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Serialization\Serialization.inl" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\ClientTCPSocket.hpp" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\IPAddress.hpp" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\ServerTCPSocket.hpp" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\Sockets\TCPSocket.hpp" />
-    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\WSAContext.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Polling\Descriptor.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Polling\Poller.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\ClientTCPSocket.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\IPAddress.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\ServerTCPSocket.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\Sockets\TCPSocket.hpp" />
+    <ClInclude Include="$(XmakeProjectDir)\inc\LittleNetwork\TCP\WSAContext.hpp" />
 
 
   </ItemGroup>
   <ItemGroup>
 
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Polling\Poller.cpp">
-      <CompileAs>CompileAsCpp</CompileAs>
-    </ClCompile>
     <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Serialization\Serialization.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Sockets\ClientTCPSocket.cpp">
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Polling\Poller.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Sockets\ServerTCPSocket.cpp">
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Sockets\ClientTCPSocket.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\Sockets\TCPSocket.cpp">
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Sockets\ServerTCPSocket.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
-    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\WSAContext.cpp">
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\Sockets\TCPSocket.cpp">
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="$(XmakeProjectDir)\src\LittleNetwork\TCP\WSAContext.cpp">
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
 
