@@ -5,12 +5,15 @@
 #include <LittleNetwork/Serialization/Serialization.hpp>
 #include <LittleNetwork/ENet/ENetContext.hpp>
 
+#include "LittleNetwork/ENet/ENetHostEx.hpp"
+
 
 int main(int argc, char** argv) {
 
     try
     {
         LN::ENetContext enetContext;
+
         
         while (true)
         {
