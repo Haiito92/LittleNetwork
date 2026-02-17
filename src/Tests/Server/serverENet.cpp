@@ -44,7 +44,12 @@ int main(int argc, char** argv) {
 					case ENET_EVENT_TYPE_RECEIVE:
 					{
 						std::cout << "Received " << event.packet->dataLength << " from client #" << event.peer->incomingPeerID << ")" << std::endl;
-						std::cout << "Content: " << std::string(reinterpret_cast<const char*>(event.packet->data), event.packet->dataLength) << std::endl;
+
+						// std::vector<uint8_t> byteRead(event.packet->data, event.packet->data + event.packet->dataLength);
+						
+						// size_t offset = 0;
+						// float receivedFloat = LN::DeserializeArithmetic<float>(byteRead, offset);
+						// std::cout << "Content: " << receivedFloat << std::endl;
 
 						enet_peer_send(event.peer, 0, event.packet);
 						break;

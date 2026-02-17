@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
 			std::string message;
 			std::getline(std::cin, message);
 
+		
 			ENetPacket* packet = enet_packet_create(message.data(), message.size(), ENET_PACKET_FLAG_RELIABLE);
 
 			enet_peer_send(peer, 0, packet);
